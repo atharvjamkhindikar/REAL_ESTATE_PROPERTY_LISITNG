@@ -1,4 +1,4 @@
-iwr "http://localhost:8080/api/properties/recommendations?location=Mumbai&budget=5000000" | Select-Object -ExpandProperty Contentiwr "http://localhost:8080/api/properties/recommendations?location=Mumbai&budget=5000000" | Select-Object -ExpandProperty Content# ⚡ Quick Reference Card - Recommend API Testing
+iwr "http://localhost:8080/api/properties/recommendations?location=Mumbai&budget=5000000" | Select-Object -ExpandProperty Contentiwr "http://localhost:8080/api/properties/recommendations?location=Mumbai&budget=5000000" | Select-Object -ExpandProperty Contentgit push origin master# ⚡ Quick Reference Card - Recommend API Testing
 
 ## Your PowerShell Command Error Fixed
 
