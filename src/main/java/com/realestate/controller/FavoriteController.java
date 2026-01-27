@@ -1,6 +1,8 @@
 package com.realestate.controller;
 
 import com.realestate.dto.ApiResponse;
+import com.realestate.dto.FavoriteResponse;
+import com.realestate.dto.PageResponse;
 import com.realestate.model.Favorite;
 import com.realestate.model.Property;
 import com.realestate.service.FavoriteService;
@@ -26,6 +28,22 @@ public class FavoriteController {
         return ResponseEntity.ok(ApiResponse.success(favorites));
     }
     
+    @GetMapping("/user/{userId}/paged")
+    public ResponseEntity<ApiResponse<PageResponse<FavoriteResponse>>> getUserFavoritesPaged(
+            @PathVariable Long userId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "createdAt") String sortBy,
+            @RequestParam(defaultValue = "DESC") String direction) {
+        try {
+            PageResponse<FavoriteResponse> favoritesPage = favoriteService.getUserFavoritesPaged(userId, page, size, sortBy, direction);
+            return ResponseEntity.ok(ApiResponse.success(favoritesPage));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(ApiResponse.error(e.getMessage()));
+        }
+    }
+
     @GetMapping("/user/{userId}/properties")
     public ResponseEntity<ApiResponse<List<Property>>> getUserFavoriteProperties(@PathVariable Long userId) {
         List<Property> properties = favoriteService.getUserFavoriteProperties(userId);

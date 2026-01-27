@@ -87,6 +87,31 @@ public interface PropertyRepository extends JpaRepository<Property, Long>, JpaSp
     @Query("SELECT AVG(p.price) FROM Property p WHERE p.city = :city AND p.available = true")
     BigDecimal getAveragePriceByCity(@Param("city") String city);
     
+    List<Property> findByBuilderGroupId(Long builderGroupId);
+
+    Page<Property> findByBuilderGroupId(Long builderGroupId, Pageable pageable);
+
+    List<Property> findByBuilderGroupIdAndAvailableTrue(Long builderGroupId);
+
+    Page<Property> findByBuilderGroupIdAndAvailableTrue(Long builderGroupId, Pageable pageable);
+
+    @Query("SELECT p FROM Property p WHERE p.available = true AND p.builderGroup.id = :builderGroupId ORDER BY p.createdAt DESC")
+    List<Property> findAvailablePropertiesByBuilderGroup(@Param("builderGroupId") Long builderGroupId, Pageable pageable);
+
+    @Query("SELECT p FROM Property p WHERE p.available = true AND " +
+           "(:city IS NULL OR LOWER(p.city) LIKE LOWER(CONCAT('%', :city, '%'))) AND " +
+           "(:builderGroupId IS NULL OR p.builderGroup.id = :builderGroupId) AND " +
+           "(:propertyType IS NULL OR p.propertyType = :propertyType) AND " +
+           "(:minPrice IS NULL OR p.price >= :minPrice) AND " +
+           "(:maxPrice IS NULL OR p.price <= :maxPrice)")
+    Page<Property> searchPropertiesByBuilderGroup(
+            @Param("city") String city,
+            @Param("builderGroupId") Long builderGroupId,
+            @Param("propertyType") PropertyType propertyType,
+            @Param("minPrice") BigDecimal minPrice,
+            @Param("maxPrice") BigDecimal maxPrice,
+            Pageable pageable);
+
     @Query("SELECT p FROM Property p WHERE p.available = true ORDER BY p.createdAt DESC")
     List<Property> findRecentProperties(Pageable pageable);
     

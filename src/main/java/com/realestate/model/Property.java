@@ -91,6 +91,12 @@ public class Property {
     @JsonIgnoreProperties({"properties", "hibernateLazyInitializer", "handler"})
     private User owner;
     
+    // Many-to-One relationship: Many properties belong to one builder group
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "builder_group_id", nullable = true)
+    @JsonIgnoreProperties({"properties", "hibernateLazyInitializer", "handler"})
+    private BuilderGroup builderGroup;
+
     // One-to-Many relationship: One property can have multiple images
     @OneToMany(mappedBy = "property", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonIgnoreProperties({"property"})

@@ -1,6 +1,7 @@
 package com.realestate.controller;
 
 import com.realestate.dto.ApiResponse;
+import com.realestate.dto.PageResponse;
 import com.realestate.dto.ScheduleViewingRequest;
 import com.realestate.model.ScheduleViewing;
 import com.realestate.model.ViewingStatus;
@@ -54,6 +55,22 @@ public class ScheduleViewingController {
         try {
             List<ScheduleViewing> viewings = scheduleViewingService.getUserViewings(userId);
             return ResponseEntity.ok(ApiResponse.success(viewings));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(ApiResponse.error(e.getMessage()));
+        }
+    }
+
+    @GetMapping("/user/{userId}/paged")
+    public ResponseEntity<ApiResponse<PageResponse<ScheduleViewing>>> getUserViewingsPaged(
+            @PathVariable Long userId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "viewingDate") String sortBy,
+            @RequestParam(defaultValue = "DESC") String direction) {
+        try {
+            PageResponse<ScheduleViewing> viewingsPage = scheduleViewingService.getUserViewingsPaged(userId, page, size, sortBy, direction);
+            return ResponseEntity.ok(ApiResponse.success(viewingsPage));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(ApiResponse.error(e.getMessage()));

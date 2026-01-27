@@ -3,6 +3,8 @@ package com.realestate.repository;
 import com.realestate.model.Favorite;
 import com.realestate.model.Property;
 import com.realestate.model.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -18,6 +20,8 @@ public interface FavoriteRepository extends JpaRepository<Favorite, Long> {
     
     List<Favorite> findByUserId(Long userId);
     
+    Page<Favorite> findByUserId(Long userId, Pageable pageable);
+
     List<Favorite> findByProperty(Property property);
     
     List<Favorite> findByPropertyId(Long propertyId);

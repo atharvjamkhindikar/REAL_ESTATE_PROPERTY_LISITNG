@@ -1,5 +1,6 @@
 package com.realestate.service;
 
+import com.realestate.dto.PageResponse;
 import com.realestate.dto.ScheduleViewingRequest;
 import com.realestate.exception.ResourceNotFoundException;
 import com.realestate.model.Property;
@@ -73,6 +74,35 @@ public class ScheduleViewingService {
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
 
         return scheduleViewingRepository.findByUserIdOrderByViewingDateAsc(userId);
+    }
+
+    public PageResponse<ScheduleViewing> getUserViewingsPaged(Long userId, int page, int size, String sortBy, String direction) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+
+        Sort sort = direction.equalsIgnoreCase("ASC")
+                ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+        Page<ScheduleViewing> viewingsPage = scheduleViewingRepository.findByUserId(userId, pageable);
+
+        return buildPageResponse(viewingsPage);
+    }
+
+    private PageResponse<ScheduleViewing> buildPageResponse(Page<ScheduleViewing> page) {
+        List<ScheduleViewing> content = page.getContent();
+
+        return PageResponse.<ScheduleViewing>builder()
+                .content(content)
+                .pageNumber(page.getNumber())
+                .pageSize(page.getSize())
+                .totalElements(page.getTotalElements())
+                .totalPages(page.getTotalPages())
+                .first(page.isFirst())
+                .last(page.isLast())
+                .hasNext(page.hasNext())
+                .hasPrevious(page.hasPrevious())
+                .build();
     }
 
     public List<ScheduleViewing> getPropertyViewings(Long propertyId) {

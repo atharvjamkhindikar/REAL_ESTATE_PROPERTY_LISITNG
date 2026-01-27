@@ -2,6 +2,8 @@ package com.realestate.repository;
 
 import com.realestate.model.ScheduleViewing;
 import com.realestate.model.ViewingStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -16,6 +18,8 @@ import java.util.Optional;
 public interface ScheduleViewingRepository extends JpaRepository<ScheduleViewing, Long> {
 
     List<ScheduleViewing> findByUserId(Long userId);
+
+    Page<ScheduleViewing> findByUserId(Long userId, Pageable pageable);
 
     List<ScheduleViewing> findByPropertyId(Long propertyId);
 

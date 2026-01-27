@@ -1,5 +1,7 @@
 package com.realestate.service;
 
+import com.realestate.dto.FavoriteResponse;
+import com.realestate.dto.PageResponse;
 import com.realestate.exception.DuplicateResourceException;
 import com.realestate.exception.ResourceNotFoundException;
 import com.realestate.model.Favorite;
@@ -69,6 +71,62 @@ public class FavoriteService {
         return favoriteRepository.findByUserId(userId);
     }
     
+    public PageResponse<FavoriteResponse> getUserFavoritesPaged(Long userId, int page, int size, String sortBy, String direction) {
+        Sort sort = direction.equalsIgnoreCase("ASC")
+                ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+        Page<Favorite> favoritePage = favoriteRepository.findByUserId(userId, pageable);
+
+        return buildPageResponse(favoritePage);
+    }
+
+    private PageResponse<FavoriteResponse> buildPageResponse(Page<Favorite> page) {
+        List<FavoriteResponse> content = page.getContent().stream()
+                .map(this::toFavoriteResponse)
+                .collect(Collectors.toList());
+
+        return PageResponse.<FavoriteResponse>builder()
+                .content(content)
+                .pageNumber(page.getNumber())
+                .pageSize(page.getSize())
+                .totalElements(page.getTotalElements())
+                .totalPages(page.getTotalPages())
+                .first(page.isFirst())
+                .last(page.isLast())
+                .hasNext(page.hasNext())
+                .hasPrevious(page.hasPrevious())
+                .build();
+    }
+
+    private FavoriteResponse toFavoriteResponse(Favorite favorite) {
+        Property property = favorite.getProperty();
+        String imageUrl = property.getImages() != null && !property.getImages().isEmpty()
+                ? property.getImages().stream()
+                    .filter(img -> img.getIsPrimary())
+                    .map(img -> img.getImageUrl())
+                    .findFirst()
+                    .orElse(property.getImages().get(0).getImageUrl())
+                : null;
+
+        return FavoriteResponse.builder()
+                .id(favorite.getId())
+                .userId(favorite.getUser().getId())
+                .propertyId(favorite.getProperty().getId())
+                .notes(favorite.getNotes())
+                .createdAt(favorite.getCreatedAt())
+                .property(FavoriteResponse.PropertySummary.builder()
+                        .id(property.getId())
+                        .title(property.getTitle())
+                        .address(property.getAddress())
+                        .city(property.getCity())
+                        .state(property.getState())
+                        .price(property.getPrice())
+                        .imageUrl(imageUrl)
+                        .build())
+                .build();
+    }
+
     public List<Property> getUserFavoriteProperties(Long userId) {
         return favoriteRepository.findFavoritePropertiesByUserId(userId);
     }

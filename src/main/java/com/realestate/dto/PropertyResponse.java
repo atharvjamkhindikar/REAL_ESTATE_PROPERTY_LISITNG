@@ -36,6 +36,7 @@ public class PropertyResponse {
     private LocalDateTime updatedAt;
     
     private OwnerSummary owner;
+    private BuilderGroupSummary builderGroup;
     private List<String> imageUrls;
     private Long favoriteCount;
     private Boolean isFavorited;
@@ -51,5 +52,15 @@ public class PropertyResponse {
         private String phone;
         private String company;
         private String profileImageUrl;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class BuilderGroupSummary {
+        private Long id;
+        private String name;
+        private String description;
     }
 }
