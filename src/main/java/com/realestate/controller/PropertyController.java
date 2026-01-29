@@ -24,6 +24,8 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/properties")
+@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001",
+                        "http://ec2-3-91-60-245.compute-1.amazonaws.com"})
 public class PropertyController {
     
     @Autowired
@@ -47,7 +49,7 @@ public class PropertyController {
     public ResponseEntity<ApiResponse<List<Property>>> getAvailableProperties() {
         return ResponseEntity.ok(ApiResponse.success(propertyService.getAvailableProperties()));
     }
-    
+
     @GetMapping("/available/paged")
     public ResponseEntity<ApiResponse<PageResponse<PropertyResponse>>> getAvailablePropertiesPaged(
             @RequestParam(defaultValue = "0") int page,

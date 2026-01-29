@@ -15,7 +15,8 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/builder-groups")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001",
+                        "http://ec2-3-91-60-245.compute-1.amazonaws.com"})
 public class BuilderGroupController {
 
     @Autowired
