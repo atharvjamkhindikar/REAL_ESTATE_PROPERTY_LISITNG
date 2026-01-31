@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 # Real Estate Backend API
 
 Spring Boot backend for Real Estate Listing Application with H2 database and proper ER relationships.
@@ -213,4 +213,4 @@ This project is developed as a **PG-DAC Final Project**, demonstrating strong co
 
 It is suitable for academic evaluation, real-world simulations, and professional portfolio showcasing.
 ```
->>>>>>> df6bb653fcb1ccb94eafea15f95624ac8c86f657
+ df6bb653fcb1ccb94eafea15f95624ac8c86f657
