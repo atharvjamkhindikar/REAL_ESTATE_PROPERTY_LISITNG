@@ -1,4 +1,4 @@
-# 🏠 Real Estate Property Listing Platform
+ 🏠 Real Estate Property Listing Platform
 
 A **Full Stack Web Application** designed to manage real estate property listings efficiently.  
 The platform provides complete **CRUD functionality** through a scalable RESTful backend and a responsive frontend UI.
@@ -39,5 +39,4 @@ The system ensures **clean separation of concerns**, **RESTful communication**, 
 
 ---
 
-## 🧩 System Architecture
 
